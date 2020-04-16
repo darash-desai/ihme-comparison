@@ -1,28 +1,67 @@
+import { useState } from "react";
 import { NextPage } from "next";
+
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import { FormControlProps } from "react-bootstrap/FormControl";
+import Row from "react-bootstrap/Row";
+import StateDropdown from "../components/StateDropdown";
+
 import fetch from "../lib/fetch";
 
-type Unpacked<T> = T extends Promise<infer U> ? U : T;
-type JSON = Unpacked<ReturnType<InstanceType<typeof Response>["json"]>>;
-
-interface IndexProps {
-  data: JSON;
-}
-
-const Index: NextPage<IndexProps> = (props) => {
-  console.log("Data", props.data);
-  return (
-    <div>
-      <p>Hello Next.js</p>
-      <p>{props.data.toString()}</p>
-    </div>
-  );
+type CTPDataPoint = {
+  date: number;
+  state: string;
+  positive: number;
+  negative: number;
+  hospitalizedCurrently?: number;
+  hospitalizedCumulative?: number;
+  inIcuCurrently?: number;
+  recovered: number;
+  death: number;
+  total: number;
+  fips: string;
 };
 
-Index.getInitialProps = async (): Promise<IndexProps> => {
-  const response = await fetch("https://covidtracking.com/api/states/daily");
-  return {
-    data: await response.json(),
+/**
+ * Fetches data from The COVID Tracking Project.
+ *
+ * @param state An optional state by which to filter the data
+ */
+const fetchCovidData = async (
+  state: string | null
+): Promise<CTPDataPoint[]> => {
+  let url = "https://covidtracking.com/api/states/daily";
+  if (state) {
+    url += `?state=${state}`;
+  }
+
+  const response = await fetch(url);
+  return await response.json();
+};
+
+const Index: NextPage = () => {
+  const [data, setData] = useState<CTPDataPoint[] | null>(null);
+  console.log("Data", data);
+
+  const onChange: FormControlProps["onChange"] = async (
+    event
+  ): Promise<void> => {
+    const state = event.currentTarget.value;
+    const results = await fetchCovidData(state);
+
+    setData(results);
   };
+
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <StateDropdown onChange={onChange} />
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default Index;
