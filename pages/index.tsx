@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import { FormControlProps } from "react-bootstrap/FormControl";
+import IHMEParser from "../components/IHMEParser";
 import Row from "react-bootstrap/Row";
 import StateDropdown from "../components/StateDropdown";
 import CTPPlot, { CTPDataPoint } from "../components/CTPPlot";
@@ -44,6 +45,11 @@ const Index: NextPage = () => {
       <Row>
         <Col>
           <StateDropdown onChange={onChange} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <IHMEParser />
         </Col>
       </Row>
       <Row>

@@ -1,0 +1,35 @@
+.fileDrop {
+  $borderRadius: 4px;
+
+  /* relatively position the container bc the contents are absolute */
+  position: relative;
+  height: 100px;
+  border: 3px #ccc dashed;
+  margin: 16px;
+  border-radius: $borderRadius;
+
+  .fileDropTarget {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: $borderRadius;
+  }
+
+  .fileDropTarget.fileDropDraggingOverFrame {
+    /* overlay a black mask when dragging over the frame */
+    border: none;
+    background-color: rgba(0, 0, 0, 0.25);
+    box-shadow: none;
+    z-index: 50;
+
+    color: white;
+  }
+
+  .fileDropTarget.fileDropDraggingOverTarget {
+    /* turn stuff orange when we are dragging over the target */
+    color: #ff6e40;
+    box-shadow: 0 0 13px 3px #ff6e40;
+  }
+}
