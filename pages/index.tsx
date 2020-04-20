@@ -6,22 +6,9 @@ import Container from "react-bootstrap/Container";
 import { FormControlProps } from "react-bootstrap/FormControl";
 import Row from "react-bootstrap/Row";
 import StateDropdown from "../components/StateDropdown";
+import CTPPlot, { CTPDataPoint } from "../components/CTPPlot";
 
 import fetch from "../lib/fetch";
-
-type CTPDataPoint = {
-  date: number;
-  state: string;
-  positive: number;
-  negative: number;
-  hospitalizedCurrently?: number;
-  hospitalizedCumulative?: number;
-  inIcuCurrently?: number;
-  recovered: number;
-  death: number;
-  total: number;
-  fips: string;
-};
 
 /**
  * Fetches data from The COVID Tracking Project.
@@ -42,7 +29,6 @@ const fetchCovidData = async (
 
 const Index: NextPage = () => {
   const [data, setData] = useState<CTPDataPoint[] | null>(null);
-  console.log("Data", data);
 
   const onChange: FormControlProps["onChange"] = async (
     event
@@ -59,6 +45,9 @@ const Index: NextPage = () => {
         <Col>
           <StateDropdown onChange={onChange} />
         </Col>
+      </Row>
+      <Row>
+        <Col>{data && <CTPPlot data={data} />}</Col>
       </Row>
     </Container>
   );
