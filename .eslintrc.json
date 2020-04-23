@@ -26,6 +26,7 @@
         "varsIgnorePattern": "[iI]gnored"
       }
     ],
+    "@typescript-eslint/interface-name-prefix": "off",
     "react/jsx-uses-vars": "error",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0
