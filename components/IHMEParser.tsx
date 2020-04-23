@@ -98,39 +98,49 @@ const IHMEParser = ({
   }, [parsedData, location, yDatum]);
 
   const onFileDrop: FileDropProps["onDrop"] = async (files, eventIgnored) => {
-    const firstFile = files?.[0];
-    if (firstFile) {
-      // Only parse data if it has not been parsed yet
-      const fileId = `${firstFile.name}-${firstFile.lastModified}-${firstFile.size}`;
-      const { name } = firstFile;
-      if (parsedData[name]) {
-        return;
+    if (files) {
+      const newData = { ...parsedData };
+      let dataUpdated = false;
+
+      for (let index = 0; index < files.length; index++) {
+        const file = files.item(index);
+        if (file) {
+          // Only parse data if it has not been parsed yet
+          const { name, lastModified, size } = file;
+          const fileId = `${name}-${lastModified}-${size}`;
+          if (parsedData[name]) {
+            return;
+          }
+
+          const result = await new Promise<ParseResult>((resolve, reject) => {
+            const result = Papa.parse(file, {
+              header: true,
+              complete: (result, fileIgnored) => {
+                resolve(result);
+              },
+              error: (error, fileIgnored) => {
+                reject(error);
+              },
+            });
+
+            if (result) {
+              resolve(result);
+            }
+          });
+
+          const { data } = result;
+          if (data) {
+            newData[fileId] = {
+              file: file,
+              data,
+            };
+
+            dataUpdated = true;
+          }
+        }
       }
 
-      const result = await new Promise<ParseResult>((resolve, reject) => {
-        const result = Papa.parse(firstFile, {
-          header: true,
-          complete: (result, fileIgnored) => {
-            resolve(result);
-          },
-          error: (error, fileIgnored) => {
-            reject(error);
-          },
-        });
-
-        if (result) {
-          resolve(result);
-        }
-      });
-
-      const { data } = result;
-      if (data) {
-        const newData = { ...parsedData };
-        newData[fileId] = {
-          file: firstFile,
-          data,
-        };
-
+      if (dataUpdated) {
         setParsedData(newData);
       }
     }
