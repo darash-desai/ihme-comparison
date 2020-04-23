@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Spinner from "react-bootstrap/spinner";
+import Spinner from "react-bootstrap/Spinner";
 import { FileDrop, FileDropProps } from "react-file-drop";
 import Papa, { ParseResult } from "papaparse";
 import { ChartPoint } from "chart.js";
