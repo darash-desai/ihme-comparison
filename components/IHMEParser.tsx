@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Spinner from "react-bootstrap/spinner";
 import { FileDrop, FileDropProps } from "react-file-drop";
 import Papa, { ParseResult } from "papaparse";
 import { ChartPoint } from "chart.js";
@@ -56,6 +57,7 @@ const IHMEParser = ({
 }: IHMEParserProps): JSX.Element => {
   type ParsedData = { [key: string]: { file: File; data: IHMEDataPoint[] } };
   const [parsedData, setParsedData] = useState<ParsedData>({});
+  const [isParsing, setIsParsing] = useState(false);
 
   // Invoke onUpdate() callback function whenever a change to the parsed IHME
   // model data has been made, or the user has chosen to alter the information
@@ -99,6 +101,8 @@ const IHMEParser = ({
 
   const onFileDrop: FileDropProps["onDrop"] = async (files, eventIgnored) => {
     if (files) {
+      setIsParsing(true);
+
       const newData = { ...parsedData };
       let dataUpdated = false;
 
@@ -143,6 +147,8 @@ const IHMEParser = ({
       if (dataUpdated) {
         setParsedData(newData);
       }
+
+      setIsParsing(false);
     }
   };
 
@@ -154,7 +160,15 @@ const IHMEParser = ({
       draggingOverTargetClassName={styles.fileDropDraggingOverTarget}
       onDrop={onFileDrop}
     >
-      Drop some files here!
+      {isParsing ? (
+        <>
+          <span>Parsing data…</span>
+          &nbsp;
+          <Spinner animation="border" size="sm" />
+        </>
+      ) : (
+        "Drop some files here!"
+      )}
     </FileDrop>
   );
 };
