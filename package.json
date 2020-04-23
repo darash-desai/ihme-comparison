@@ -22,6 +22,7 @@
   "dependencies": {
     "@types/chart.js": "^2.9.19",
     "@types/node": "^13.11.1",
+    "@types/papaparse": "^5.0.3",
     "@types/react": "^16.9.34",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
@@ -29,11 +30,14 @@
     "isomorphic-unfetch": "^3.0.0",
     "jquery": "^3.5.0",
     "next": "^9.3.5",
+    "papaparse": "^5.2.0",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
+    "react-file-drop": "^3.0.6",
+    "sass": "^1.26.3",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
